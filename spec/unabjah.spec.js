@@ -1,11 +1,11 @@
-describe 'Unabja'
+describe 'Unabjah'
   before
     play_area = new Element('div', { id:'play_area', style:'display:none'})
 
     $$('body')[0].insert(play_area)
 
-    simple_pro = new UnabJa({ })
-    simple_pro_other_scope = new UnabJa({ }, { scope:'other_scope' })
+    simple_pro = new UnabJah({ })
+    simple_pro_other_scope = new UnabJah({ }, { scope:'other_scope' })
   end
 
   before_each
@@ -22,6 +22,7 @@ describe 'Unabja'
   end
 
   it "should apply rules onload"
+    // these were loaded at startup to test dom:onload
     $$('#fixture-1 li').each(function(el){
       el.hasClassName('hello_man').should.be true
     })
@@ -29,8 +30,8 @@ describe 'Unabja'
 
   it "should only have one one rule applied per selector and that rule can be reassigned"
     var class_name = 'applied'
-    simple_pro.add_behavior({ 'li': function(el){ el.addClassName(class_name) } })
-    simple_pro.add_behavior({ 'li': function(el){ el.addClassName(class_name + "_other") } })
+    simple_pro.add_rules({ 'li': function(el){ el.addClassName(class_name) } })
+    simple_pro.add_rules({ 'li': function(el){ el.addClassName(class_name + "_other") } })
     simple_pro.apply_rules(play_area)
 
     play_area.select('li').each( function(el) {
@@ -43,8 +44,8 @@ describe 'Unabja'
   it "a different scope should have different rules"
     var func1 = function(el){ el.addClassName("ohyeah"); };
     var func2 = function(el){ el.addClassName("ohyeah2"); };
-    simple_pro.add_behavior({ 'li#boy': func1 })
-    simple_pro_other_scope.add_behavior({ 'li#boy': func2 });
+    simple_pro.add_rules({ 'li#boy': func1 })
+    simple_pro_other_scope.add_rules({ 'li#boy': func2 });
     simple_pro.rules['li#boy'].should.be func1
     simple_pro_other_scope.rules['li#boy'].should.be func2
   end
@@ -53,8 +54,8 @@ describe 'Unabja'
     var func1 = function(el){ el.addClassName("ohyeah"); };
     var func2 = function(el){ el.addClassName("ohyeah2"); };
     play_area.select('li').each( function(el){ el.addClassName('boy') })
-    simple_pro.add_behavior({ 'li.boy': func1 })
-    simple_pro_other_scope.add_behavior({ 'li.boy': func2 });
+    simple_pro.add_rules({ 'li.boy': func1 })
+    simple_pro_other_scope.add_rules({ 'li.boy': func2 });
     $$('li.boy').each(function(el){
       simple_pro.rule_has_been_applied(el, 'li.boy').should.be false
       simple_pro_other_scope.rule_has_been_applied(el, 'li.boy').should.be false
@@ -77,7 +78,7 @@ describe 'Unabja'
   end
 
   it "should apply rules to only element passed to apply rules"
-    simple_pro.add_behavior({ 'li': function(el){ el.addClassName('only_here_in_fx_2') } })
+    simple_pro.add_rules({ 'li': function(el){ el.addClassName('only_here_in_fx_2') } })
     simple_pro.apply_rules($('fixture-2'))
    $$('#fixture-1 li').each(function(el){
      el.hasClassName('only_here_in_fx_2').should.be false
@@ -90,16 +91,16 @@ describe 'Unabja'
   it "should be able to add a rule"
     var func =  function(el) { };
     var func2 =  function(el) { };
-    simple_pro.add_behavior({'li': func });
+    simple_pro.add_rules({'li': func });
     simple_pro.rules['li'].should.be func
-    simple_pro.add_behavior({'li.beach': func2 });
+    simple_pro.add_rules({'li.beach': func2 });
     simple_pro.rules['li.beach'].should.be func2
   end
 
   it "should be able to apply the rule to all elements"
     var class_name = 'hello'
     var func =  function(el) { el.addClassName(class_name) };
-    simple_pro.add_behavior( {'li.sp_tester': func } );
+    simple_pro.add_rules( {'li.sp_tester': func } );
     simple_pro.apply_rules();
     $$('li.sp_tester').each(function(el) {
       el.hasClassName("hello").should.be true
@@ -111,7 +112,7 @@ describe 'Unabja'
   it "should only apply the rule to any given element once"
     var class_name = 'hello'
     var func =  function(el) { el.addClassName(class_name) };
-    simple_pro.add_behavior( {'li.sp_tester': func } );
+    simple_pro.add_rules( {'li.sp_tester': func } );
     simple_pro.apply_rules();
     $$('li.sp_tester').each(function(el) {
       el.hasClassName("hello").should.be true
@@ -130,7 +131,7 @@ describe 'Unabja'
   it "should apply rules after ajax update"
     var class_name = 'hello'
     var func =  function(el) { el.addClassName(class_name) };
-    simple_pro.add_behavior( {'li.sp_tester': func } );
+    simple_pro.add_rules( {'li.sp_tester': func } );
 
     Ajax.Responders.dispatch('onComplete', this, "response");
 

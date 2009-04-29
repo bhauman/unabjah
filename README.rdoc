@@ -1,9 +1,10 @@
 = UnabJah.js - Simply Unobtrusive Javascript
 
-Finally unobtrusive javascript the way I have wanted it.
+Finally unobtrusive javascript the simple way.
 
-Much like LowPro this library will map selectors to functions. So you can create
-a map of selectors to make certain elements on a page processed by javacript function.
+Like LowPro this library will map selectors to functions. The selectors will 
+select elements in the DOM and will process the matched elements with the associated
+function.
 
 Whats cool about this library is that it will reapply those rules only to the elements that haven't
 had them applied to already. The is a Ajax hook that automatically reaplies the rules but again
@@ -27,14 +28,27 @@ Unabja simply maps CSS selectors to functions that take the matched elements. Fo
 
   <script>
     var unabja = new Unabja({
-      'li' : function(element){ element.addClassName('unabja_put_me_here') },
-      'div': function(element){ element.addClassName('unabja_put_me_here_too') }
+      'li' : function(element){ element.addClassName('unabja_put_me_here'); },
+      'div': function(element){ element.addClassName('unabja_put_me_here_too'); }
     })
-  <script>
+  </script>
 
 That code will apply the function to every 'li' element on the page.  
 
+You can also add overide rules at a later time.
+  
+  unabja.add_rules({'.horse_play': function(el){ el.addClassName('highlight'); }});
+
 === Behavior
+
+The selectors are effectively hash keys. There can only be one function per selector.
+
+    var unabja = new Unabja({
+      'li' : function(element){ element.addClassName('unabja_put_me_here') },
+      'li' : function(element){  element.addClassName('sorry_i_am_the_only_one_who_shows_up') }
+    })
+
+Only the second rule will be executed on the 'li' elements.  
 
 IMPORTANT: It will do this on 'dom:loaded' automaticly.  Don't wrap the above
 code in function that is waiting for the dom to load or nothing will happen.
@@ -50,7 +64,7 @@ You can also pass an element to this call to restrict the reapplication area.  F
 
   unabja.apply_rules($$('.newstuff')[0]);
 
-So only elements below .newstuff will have the rules reapplied to.
+Only elements below .newstuff will have the rules reapplied to.
 
 ===  Testing
 
