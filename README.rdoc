@@ -17,7 +17,7 @@ The library is tested with jspec.
 
 === Using Unabjah
 
-Prototype is required to use UnabJa.
+Prototype 1.6 is required to use UnabJah.
 
   <script type="text/javascript" src="/javascripts/prototype.js">
   <script type="text/javascript" src="/javascripts/unabjah.js">
