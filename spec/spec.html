@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="../fixtures/jspec.css" />
+    <script src="../fixtures/jspec.js"></script>
+    <script src="../fixtures/prototype.js"></script>
+    <script src="../lib/unabja.js"></script>
+    <script src="unabja_test.js"></script>
+    <script>
+      function runSuites() {
+        JSpec
+        .exec('unabja.spec.js')
+        .run()
+        .report()
+      }
+    </script>
+    <style>
+      .fixture { display:none;}
+    </style>
+  </head>
+  <body class="jspec" onLoad="runSuites();">
+    <div id="jspec-top"><h2 id="jspec-title">JSpec <em><script>document.write(JSpec.version)</script></em></h2></div>
+    <div id="jspec"></div>
+    <div id="jspec-bottom"></div>
+
+    <div id="fixture-1" class="fixture">
+       <ul>
+         <li></li>
+         <li></li>
+         <li></li>
+       </ul>
+    </div>
+    <div id="fixture-2" class="fixture">
+       <ul>
+         <li></li>
+         <li></li>
+         <li></li>
+       </ul>
+    </div>
+
+  </body>
+</html>

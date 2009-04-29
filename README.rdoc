@@ -1,0 +1,82 @@
+= UnabJah.js - Simply Unobtrusive Javascript
+
+Finally unobtrusive javascript the way I have wanted it.
+
+Much like LowPro this library will map selectors to functions. So you can create
+a map of selectors to make certain elements on a page processed by javacript function.
+
+Whats cool about this library is that it will reapply those rules only to the elements that haven't
+had them applied to already. The is a Ajax hook that automatically reaplies the rules but again
+ONLY to those elements on the page that haven't gotten the rules applied.
+
+You can also explicitly reapply the rules when you need to, for instance to create a Jquery Ajax 
+Request completion hook.
+
+The library is tested with jspec.
+
+=== Using Unabja
+
+Prototype is required to use UnabJa.
+
+  <script type="text/javascript" src="/javascripts/prototype.js">
+  <script type="text/javascript" src="/javascripts/unabja.js">
+
+=== Creating Rules
+
+Unabja simply maps CSS selectors to functions that take the matched elements. For example:
+
+  <script>
+    var unabja = new Unabja({
+      'li' : function(element){ element.addClassName('unabja_put_me_here') },
+      'div': function(element){ element.addClassName('unabja_put_me_here_too') }
+    })
+  <script>
+
+That code will apply the function to every 'li' element on the page.  
+
+=== Behavior
+
+IMPORTANT: It will do this on 'dom:loaded' automaticly.  Don't wrap the above
+code in function that is waiting for the dom to load or nothing will happen.
+
+Now if you make an Ajax request the above code will cause any new 'li' elements on the page
+to be passed to the function on the completeion of the Ajax Request. So they will get the 'unabja_put_me_here' class as well.
+
+If you find that you need to reapply the rules explicitly that you would:
+
+  unabja.apply_rules();
+
+You can also pass an element to this call to restrict the reapplication area.  For performance?
+
+  unabja.apply_rules($$('.newstuff')[0]);
+
+So only elements below .newstuff will have the rules reapplied to.
+
+===  Testing
+
+Unabja is fairly well tested with Jspec. Look at the tests in the unabja.spec.js file to learn more about usage.  To run the tests simply open spec.html in your browser of choice.
+
+== License
+
+(The MIT License)
+
+Copyright (c) 2009 Your Name <Your Email>
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
