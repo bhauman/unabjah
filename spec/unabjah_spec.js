@@ -12,13 +12,13 @@ describe 'Unabjah'
     home_element =  new Element('ul')
     $R(1,5).each(function(){ home_element.insert('<li class="sp_tester"></li>'); })
     play_area.insert(home_element)
+
   end
 
   after_each
    play_area.update('')
    simple_pro.rules = { }
    simple_pro_other_scope.rules = { }
-
   end
 
   it "should apply rules onload"
@@ -126,6 +126,46 @@ describe 'Unabjah'
     simple_pro.apply_rules()
     $$('li.sp_tester').first().hasClassName('hello2').should.be false
     $$('li.sp_tester').last().hasClassName('hello2').should.be true
+  end
+
+  it "should apply unmarkable rules more than once to an element once"
+    var class_name = 'hello'
+    var func =  UnabJah.unmarkable_rule(function(el) { el.addClassName(class_name) });
+    simple_pro.add_rules( {'li.sp_tester': func } );
+    simple_pro.apply_rules();
+    $$('li.sp_tester').each(function(el) {
+      el.hasClassName("hello").should.be true
+    })
+    class_name = 'hello2'
+    simple_pro.apply_rules()
+    $$('li.sp_tester').each(function(el) {
+      el.hasClassName("hello2").should.be true
+    })
+    home_element.insert('<li class="sp_tester"></li>');
+    simple_pro.apply_rules()
+    $$('li.sp_tester').first().hasClassName('hello2').should.be true
+    $$('li.sp_tester').last().hasClassName('hello2').should.be true
+  end
+
+  it "should have working toggle classname on condition"
+    simple_pro.add_rules( {'li.sp_tester': UnabJah.toggle_classname_on_condition('marty', function(el) { return el.hasClassName('sp_tester');}) } );    
+    simple_pro.apply_rules();
+    $$('li.sp_tester').each(function(el) {
+      el.hasClassName("marty").should.be true
+    })
+    simple_pro.add_rules( {'li.sp_tester': UnabJah.toggle_classname_on_condition('heythere', function(el) { return el.hasClassName('marty');}) } );    
+    simple_pro.apply_rules();
+    $$('li.sp_tester').each(function(el) {
+      el.hasClassName("heythere").should.be true
+    })
+    $$('li.sp_tester').each(function(el) {
+      el.removeClassName("marty");
+    })
+    simple_pro.apply_rules();
+    $$('li.sp_tester').each(function(el) {
+      el.hasClassName("heythere").should.be false
+    })    
+
   end
 
   it "should apply rules after ajax update"
